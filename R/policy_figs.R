@@ -6,18 +6,19 @@ library(scales)
 
 #load data
 dd <- read.csv("./Data/replication_data.csv")
-dd_J <- read.csv("./Data/journal_data.csv")
+dd$JIF <- ifelse(dd$JIF=="<0.1",0.1,as.numeric(dd$JIF))
 
+# journal impact factor info 
+mean(dd$JIF)
+sd(dd$JIF)
+median(dd$JIF)
+range(dd$JIF)
 
 ## remove out of scope papers
 dd_scope <- subset(dd,info_found!="Out of scope for this journal")
 
 ## number out of scope
 nrow(dd) - nrow(dd_scope)
-
-## add on journal Impact Factors (JIF)
-dd_scope$JIF <- dd_J[match(dd_scope$Journal,dd_J$Journal),"X2023.JIF"]
-dd_scope$JIF <- ifelse(dd_scope$JIF=="<0.1",0.1,as.numeric(dd_scope$JIF))
 
 # group replication policy and accepting categories into single variables
 dd_scope$replication_policy <- ifelse(dd_scope$info_found=="Yes",
