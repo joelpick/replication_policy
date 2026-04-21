@@ -17,23 +17,41 @@ Data and code for 'What do ecology and evolutionary biology journal websites com
 Data from 
 
 **Timestamp:** time and date of extraction
+
 **Extractor:** initials of extractor
+
 **Journal:** journal title
+
 **info_found:** whether information on replication was found, or whether journal was out of scope (three level factor)
+
 **policy_location:** where policy was found
+
 **policy_text1:** example text of policy 
+
 **policy_URL1:** url for example
+
 **policy_text2:** example text of policy, if second text found
+
 **policy_URL2:** url for example, if second text found
+
 **replications_mention:** whether replications were mentioned directly
+
 **replication_policy_mentions:** what the policy is, if replication are directly mentioned,, categories "Accept and encourage", "Accept with neutral/no position", "Accept but discourage", "Not accept"
+
 **accept_category_mentions:** if policy was accept, in what form are the replications accepted, categories "Generally accepts", "Special article type", "TOP 3: RR"
+
 **replication_policy_not:** what the policy is, if replication not directly mentioned, categories "Accept and encourage", "Accept with neutral/no position", "Accept but discourage", "Not accept"
+
 **accept_category_not:** if policy was accept, in what form are the replications accepted, categories "Generally accepts", "Special article type", "TOP 3: RR"
+
 **novelty:** whether novelty language was used
+
 **novelty_text:** example text of novelty language
+
 **novelty_URL:** location of novelty language
+
 **Translation:** whether translation software was used
+
 **JIF:** 2023 journal impact factor 
 
 
@@ -49,14 +67,19 @@ R v4.4.0
 
 ### Packages used 
 viridis_0.6.5
+
 viridisLite_0.4.2
+
 beeswarm_0.4.0
+
 scales_1.4.0
 
 
 ## Figures
 Figure_replication_policy.png
+
 Figure_novel_policy.png
+
 Figure_JIF.png
 
 
