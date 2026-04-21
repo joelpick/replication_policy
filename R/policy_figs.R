@@ -57,9 +57,10 @@ tab2 <- table(dd_scope$replication_policy,dd_scope$replications_mention)[c(4,2,3
 tab2/sum(tab2)
 
 setEPS()
-pdf("./Figures/Figure_replication_policy.pdf", height=6, width=9)
+# pdf("./Figures/Figure_replication_policy.pdf", height=6, width=9)
+png("./Figures/Figure_replication_policy.png", height=430, width=645)
 {
-par(mfrow=c(1,2), mar=c(5,4,1,2))
+par(mfrow=c(1,2), mar=c(5,5,1,1))
 bp1<-barplot(tab1[,2:1], col=palette.colors()[c(2,3,8)], xlab="Information about replication", ylab="Number of Journals", horiz=FALSE, ylim= c(0,230))
 legend("topleft",c("Directly ","Indirectly ","No Info"), pch=15,col=palette.colors()[c(2,3,8)],bty="n")
 mtext("A)",side=3, adj=0, las=1,outer=TRUE, line=-2, cex=1.5)
@@ -74,13 +75,11 @@ text(rep(bp1[1],2),x2[1:2],tab1[1:2,2])
 text(bp1[2],x1[3],tab1[3,1], col="white")
 
 
-
-
 par(mar=c(5,5,1,1))
 bp2 <- barplot(tab2[,2:1], col=viridis::viridis(nrow(tab2)), xlab="Directly mentions replication", ylab="Number of Journals", horiz=FALSE, ylim=c(0,27),yaxt="n")
 axis(2,c(0,5,10,15,20),c(0,5,10,15,20))
 legend("topleft",rownames(tab2), pch=15,col=viridis::viridis(nrow(tab2)),box.col=0)#,box.col="white", bg="white"
-mtext("B)",side=3, adj=0.43, las=1,outer=TRUE, line=-2, cex=1.5)
+mtext("B)",side=3, adj=0.53, las=1,outer=TRUE, line=-2, cex=1.5)
 
 x1<-rep(NA,nrow(tab2))
 x2<-rep(NA,nrow(tab2))
@@ -95,7 +94,8 @@ dev.off()
 
 
 setEPS()
-pdf("./Figures/Figure_novel_policy.pdf", height=6, width=4.5)
+# pdf("./Figures/Figure_novel_policy.pdf", height=6, width=4.5)
+png("./Figures/Figure_novel_policy.png", height=430, width=320)
 {
 novel_rep <- table(dd_scope$replication_policy,dd_scope$novelty)[c(4,2,3,1),2:1]
 novel_rep
@@ -129,17 +129,19 @@ novelty_mean<-aggregate(JIF~novelty,dd_scope,mean)
 novelty_se<-aggregate(JIF~novelty,dd_scope,se)
 
 setEPS()
-pdf("./Figures/Figure_JIF.pdf", height=5, width=9)
+# pdf("./Figures/Figure_JIF.pdf", height=5, width=9)
+png("./Figures/Figure_JIF.png", height=340, width=645)
+
 {
 par(mfrow=c(1,2), mar=c(5,5,1,1))
-beeswarm(JIF~info_found,dd_scope, subset=info_found!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Information about replication", log=TRUE, at=2:1)
-points(info_mean[,2]~c(1,2), pch=19, col="red")
-arrows(c(1,2),info_mean[,2]+info_se[,2],c(1,2),info_mean[,2]-info_se[,2], code=3, angle=90, length=0.1, col="red")
+beeswarm(JIF~info_found,dd_scope, subset=info_found!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Information about replication", log=TRUE, at=2:1, ylab="Journal impact factor")
+points(info_mean[,2]~c(2,1), pch=19, col="red")
+arrows(c(2,1),info_mean[,2]+info_se[,2],c(2,1),info_mean[,2]-info_se[,2], code=3, angle=90, length=0.1, col="red")
 mtext("A)",side=3, adj=0.02, las=1,outer=TRUE, line=-2, cex=1.5)
 
-beeswarm(JIF~novelty,dd_scope, subset=novelty!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Used novelty language", log=TRUE, at=2:1)
-points(novelty_mean[,2]~c(1,2), pch=19, col="red")
-arrows(c(1,2),novelty_mean[,2]+novelty_se[,2],c(1,2),novelty_mean[,2]-novelty_se[,2], code=3, angle=90, length=0.1, col="red")
+beeswarm(JIF~novelty,dd_scope, subset=novelty!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Used novelty language", log=TRUE, at=2:1, ylab="Journal impact factor")
+points(novelty_mean[,2]~c(2,1), pch=19, col="red")
+arrows(c(2,1),novelty_mean[,2]+novelty_se[,2],c(2,1),novelty_mean[,2]-novelty_se[,2], code=3, angle=90, length=0.1, col="red")
 mtext("B)",side=3, adj=0.53, las=1,outer=TRUE, line=-2, cex=1.5)
 
 }
