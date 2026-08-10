@@ -83,7 +83,7 @@ round(tab1/sum(tab1),3)*100
 
 par(mfrow=c(1,2), mar=c(5,4,1,2))
 bp1<-barplot(tab1[,2:1], col=palette.colors()[c(2,3,8)], xlab="Information about replication", ylab="Number of Journals", horiz=FALSE, ylim= c(0,230))
-legend("topleft",c("Directly ","Indirectly ","No Info"), pch=15,col=palette.colors()[c(2,3,8)],bty="n")
+legend("topleft",c("Directly ","Indirectly ","No Info"), pch=15,col=palette.colors()[c(3,2,8)],bty="n")
 mtext("A)",side=3, adj=0, las=1,outer=TRUE, line=-2, cex=1.5)
 
 
