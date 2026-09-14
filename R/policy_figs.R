@@ -24,7 +24,9 @@ nrow(dd) - nrow(dd_scope)
 dd_scope$replication_policy <- ifelse(dd_scope$info_found=="Yes",
 	ifelse(dd_scope$replications_mention=="Yes",dd_scope$replication_policy_mentions,dd_scope$replication_policy_not
 		),NA)
-dd_scope$accept_category <- ifelse(dd_scope$info_found=="Yes", 
+dd_scope$replication_policy<-ifelse(dd_scope$replication_policy=="Not accept","Do not accept",dd_scope$replication_policy)
+
+dd_scope$accept_category <- ifelse(dd_scope$info_found=="Yes",
 	ifelse(dd_scope$replications_mention=="Yes",dd_scope$accept_category_mentions,dd_scope$accept_category_not
 		),NA)
 
@@ -105,7 +107,7 @@ tab2/sum(tab2)
 par(mar=c(5,5,1,1))
 bp2 <- barplot(tab2[,2:1], col=viridis::viridis(nrow(tab2)), xlab="Directly mentions replication", ylab="Number of Journals", horiz=FALSE, ylim=c(0,27),yaxt="n")
 axis(2,c(0,5,10,15,20),c(0,5,10,15,20))
-legend("topleft",rownames(tab2), pch=15,col=viridis::viridis(nrow(tab2)),box.col=0)#,box.col="white", bg="white"
+legend("topleft",rownames(tab2)[4:1], pch=15,col=viridis::viridis(nrow(tab2))[4:1],box.col=0)#,box.col="white", bg="white"
 mtext("B)",side=3, adj=0.53, las=1,outer=TRUE, line=-2, cex=1.5)
 
 x1<-rep(NA,nrow(tab2))
@@ -135,7 +137,7 @@ novel_rep
 par(mfrow=c(1,1), mar=c(5,5,1,1))
 bp3 <- barplot(novel_rep, beside=FALSE,col=viridis::viridis(4), ylim=c(0,22), ylab="Number of Journals", xlab="Used novelty language", yaxt="n")
 axis(2,c(0,5,10,15),c(0,5,10,15))
-legend("topleft",rownames(novel_rep), pch=15,col=viridis::viridis(nrow(novel_rep)),box.col=0)
+legend("topleft",rownames(novel_rep)[4:1], pch=15,col=viridis::viridis(nrow(novel_rep))[4:1],box.col=0)
 
 x1<-rep(NA,nrow(novel_rep))
 x2<-rep(NA,nrow(novel_rep))
