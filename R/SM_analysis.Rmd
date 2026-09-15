@@ -16,14 +16,12 @@ setwd("/Users/joelpick/github/replication_policy")
 
 dd <- read.csv("./Data/replication_data.csv")
 pub <- read.csv("./Data/publishers.csv")
-dd$JIF <- ifelse(dd$JIF=="<0.1",0.1,as.numeric(dd$JIF))
 
 dd$Publisher2<-pub$Publisher2[match(dd$Journal,pub$Journal)]
 
-
-
 ## remove out of scope papers
 dd_scope <- subset(dd,info_found!="Out of scope for this journal")
+dd_scope$JIF <- as.numeric(dd_scope$JIF)
 dd_scope$JIF_log <- log(dd_scope$JIF)
 
 
@@ -37,6 +35,9 @@ dd_scope$JIF_log <- log(dd_scope$JIF)
 
 # Does accounting for publisher impact JIF analysis
 
+In the main article, we modelled journal impact factor as a function of whether there was information on replication and whether novelty language was used. We do not account foe the potential non-independence between different publishers. 
+
+This was suggested during peer review, and so here we present a sensitivity analysis, including a random effect of publisher. We test the statistical significance of the two predictors using likelihood ratio tests, comparing models with both predictors, with models that drop one predictor at a time. 
 
 ```{r, echo=FALSE, message=FALSE}
 
@@ -53,16 +54,26 @@ summary(model_noRE)
 
 # Do impact factors vary between publishers
 
+We can examine the variation among publishers
+
 ```{r, echo=FALSE, message=FALSE}
 
+pub_tab<-table(dd_scope$Publisher2)
+mult_pub<-names(pub_tab[pub_tab>1])
+dd_scope$mult_pub<-as.factor(dd_scope$Publisher2 %in% mult_pub)
+new_order <- with(dd_scope, reorder(Publisher2, JIF_log , median , na.rm=T))
+
 par(mar=c(4,10,1,1))
-boxplot(JIF_log~Publisher2,dd_scope, horizontal=TRUE, las=1)
+
+boxplot(JIF~new_order,dd_scope, horizontal=TRUE, ylab="",  border=c(2,4)[as.factor((pub_tab>1)[levels(new_order)])], yaxt="n", log="x", range=0)
+Map(axis, side=2, at=1:length(levels(new_order)), col.axis=c(2,4)[as.factor((pub_tab>1)[levels(new_order)])], labels=levels(new_order), cex.axis=0.3, las=1)
+
 
 # boxplot(JIF_log~mult_pub,dd_scope, horizontal=TRUE, las=1)
 ```
 
 
-# Do replication Replications mentioned vary between publishers
+# Does whether replication are mentioned vary between publishers
 
 ```{r, echo=FALSE, message=FALSE}
 
@@ -75,7 +86,6 @@ pub_tab2<-table(dd_scope$Publisher2,dd_scope$info_found)
 mult_pub<-rownames(pub_tab2[rowSums(pub_tab2)>1,])
 dd_scope$mult_pub<-dd_scope$Publisher2 %in% mult_pub
 
-
 table(dd_scope$mult_pub,dd_scope$info_found)
 ```
 
@@ -83,7 +93,7 @@ table(dd_scope$mult_pub,dd_scope$info_found)
 
 
 
-Does accounting for publisher impact JIF analysis
+# 
 
 
 ```{r, echo=FALSE, message=FALSE}
