@@ -34,6 +34,7 @@ dd_scope$accept_category <- ifelse(dd_scope$info_found=="Yes",
 pub_tab<-table(dd_scope$Publisher2,dd_scope$replication_policy)
 pub_tab[rowSums(pub_tab)>0,c(1,3,2,4)]
 
+## whether info is found or not 
 pub_tab2<-table(dd_scope$Publisher2,dd_scope$info_found)
 
 pub_tab2[pub_tab2[,2]>0,]

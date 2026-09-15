@@ -1,0 +1,130 @@
+---
+title: Supplementary material for What do ecology and evolutionary biology journal websites communicate about their policies and preferences regarding replication studies?
+author: Leyla Cabugos, Joel L. Pick, Marija Purgar
+---
+
+
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+
+library(beeswarm)
+library(viridis)
+library(scales)
+
+setwd("/Users/joelpick/github/replication_policy")
+
+dd <- read.csv("./Data/replication_data.csv")
+pub <- read.csv("./Data/publishers.csv")
+dd$JIF <- ifelse(dd$JIF=="<0.1",0.1,as.numeric(dd$JIF))
+
+dd$Publisher2<-pub$Publisher2[match(dd$Journal,pub$Journal)]
+
+
+
+## remove out of scope papers
+dd_scope <- subset(dd,info_found!="Out of scope for this journal")
+dd_scope$JIF_log <- log(dd_scope$JIF)
+
+
+# group replication policy and accepting categories into single variables
+# dd_scope$replication_policy <- ifelse(dd_scope$info_found=="Yes", ifelse(dd_scope$replications_mention=="Yes",dd_scope$replication_policy_mentions,dd_scope$replication_policy_not),NA)
+
+# pub_tab<-table(dd_scope$Publisher2,dd_scope$replication_policy)
+#pub_tab[rowSums(pub_tab)>0,c(1,3,2,4)]
+```
+
+
+# Does accounting for publisher impact JIF analysis
+
+
+```{r, echo=FALSE, message=FALSE}
+
+model_full<-lme4::lmer(JIF_log~novelty + info_found + (1|Publisher2),dd_scope )
+model_noN<-lme4::lmer(JIF_log~info_found + (1|Publisher2),dd_scope )
+model_noR<-lme4::lmer(JIF_log~novelty + (1|Publisher2),dd_scope )
+anova(model_full,model_noN)
+anova(model_full,model_noR)
+summary(model_full)
+
+model_noRE<-lm(JIF_log~novelty + info_found,dd_scope )
+summary(model_noRE)
+```
+
+# Do impact factors vary between publishers
+
+```{r, echo=FALSE, message=FALSE}
+
+par(mar=c(4,10,1,1))
+boxplot(JIF_log~Publisher2,dd_scope, horizontal=TRUE, las=1)
+
+# boxplot(JIF_log~mult_pub,dd_scope, horizontal=TRUE, las=1)
+```
+
+
+# Do replication Replications mentioned vary between publishers
+
+```{r, echo=FALSE, message=FALSE}
+
+## whether info is found or not 
+pub_tab2<-table(dd_scope$Publisher2,dd_scope$info_found)
+
+# pub_tab2[pub_tab2[,2]>0,]
+# pub_tab2[rowSums(pub_tab2)==1,]
+
+mult_pub<-rownames(pub_tab2[rowSums(pub_tab2)>1,])
+dd_scope$mult_pub<-dd_scope$Publisher2 %in% mult_pub
+
+
+table(dd_scope$mult_pub,dd_scope$info_found)
+```
+
+
+
+
+
+Does accounting for publisher impact JIF analysis
+
+
+```{r, echo=FALSE, message=FALSE}
+
+
+
+#with(dd_scope, tapply(JIF_log,list(mult_pub,info_found),mean))
+
+#with(dd_scope, tapply(JIF_log,list(mult_pub,novelty),mean))
+
+
+
+
+####################
+##### Figure 2
+##### Impact factor figure
+####################
+
+
+se<-function(x)sd(x)/sqrt(length(x))
+
+info_mean<-aggregate(JIF~info_found+mult_pub,dd_scope,mean)
+info_se<-aggregate(JIF~info_found+mult_pub,dd_scope,se)
+
+novelty_mean<-aggregate(JIF~novelty+mult_pub,dd_scope,mean)
+novelty_se<-aggregate(JIF~novelty+mult_pub,dd_scope,se)
+
+
+
+par(mfrow=c(1,2), mar=c(5,5,1,1))
+beeswarm(JIF~info_found+mult_pub,dd_scope, subset=info_found!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Information about replication", log=TRUE, at=4:1, ylab="Journal impact factor")
+points(info_mean[,3]~c(4,2,1), pch=19, col="red")
+arrows(c(4,2,1),info_mean[,3]+info_se[,3],c(4,2,1),info_mean[,3]-info_se[,3], code=3, angle=90, length=0.1, col="red")
+mtext("A)",side=3, adj=0.02, las=1,outer=TRUE, line=-2, cex=1.5)
+
+beeswarm(JIF~novelty+mult_pub,dd_scope, subset=novelty!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Used novelty language", log=TRUE, at=4:1, ylab="Journal impact factor")
+points(novelty_mean[,3]~c(4:1), pch=19, col="red")
+arrows(c(4:1),novelty_mean[,3]+novelty_se[,3],c(4:1),novelty_mean[,3]-novelty_se[,3], code=3, angle=90, length=0.1, col="red")
+mtext("B)",side=3, adj=0.53, las=1,outer=TRUE, line=-2, cex=1.5)
+
+
+
+```
+
