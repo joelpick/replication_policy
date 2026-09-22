@@ -84,7 +84,7 @@ new_order <- with(dd_scope, reorder(Publisher2, JIF_log , median , na.rm=T))
 
 par(mar=c(4,10,1,1))
 
-boxplot(JIF~new_order,dd_scope, horizontal=TRUE, ylab="",  border=c(2,"purple",4)[as.factor(((pub_tab>1 )+( pub_tab>5))[levels(new_order)])], yaxt="n", log="x", range=0)
+boxplot(JIF~new_order,dd_scope, horizontal=TRUE, ylab="",  border=c(2,"purple",4)[as.factor(((pub_tab>1 )+( pub_tab>5))[levels(new_order)])], yaxt="n", log="x", range=0, xlab="Journal Impact Factor")
 Map(axis, side=2, at=1:length(levels(new_order)), col.axis=c(2,"purple",4)[as.factor(((pub_tab>1 )+( pub_tab>5))[levels(new_order)])], labels=levels(new_order), cex.axis=0.3, las=1)
 legend("bottomright",c("1","2-5",">5"),col=c(2,"purple",4),pch=19, title="Number of Journals", bty="n")
 
@@ -115,7 +115,9 @@ pub_tab2<-table(dd_scope$Publisher2,dd_scope$info_found)
 # dd_scope$mult_pub<-dd_scope$Publisher2 %in% mult_pub
 
 table(dd_scope$mult_pub,dd_scope$info_found)
-barplot(t(table(dd_scope$mult_pub,dd_scope$info_found))[2:1,], beside=TRUE, names.arg=c("1 journal", "2-5 journals", ">5 journals"))
+barplot(t(table(dd_scope$mult_pub,dd_scope$info_found))[2:1,], beside=TRUE, names.arg=c("1 journal", "2-5 journals", ">5 journals"), xlab="Publisher", ylab="Number of Journals")
+legend("topleft", c("Yes","No"), pch=15,col=grey.colors(2), title="Information on Replications", bty="n")
+
 
 # nov<-table(dd_scope$mult_pub,dd_scope$novelty)
 # nov[,2]/rowSums(nov)
@@ -158,14 +160,15 @@ novelty_se<-aggregate(JIF~novelty+mult_pub,dd_scope,se)
 
 
 par(mfrow=c(1,2), mar=c(5,5,1,1))
-beeswarm(JIF~info_found+mult_pub,dd_scope, subset=info_found!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Information about replication", log=TRUE, at=6:1, ylab="Journal impact factor")
-points(info_mean[,3]~c(6,4:1), pch=19, col="red")
-arrows(c(6,4:1),info_mean[,3]+info_se[,3],c(6,4:1),info_mean[,3]-info_se[,3], code=3, angle=90, length=0.1, col="red")
+beeswarm(JIF~info_found+mult_pub,dd_scope, subset=info_found!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(c(2,2,"purple","purple",4,4),0.3),method = "compactswarm",corral="wrap", xlab="Information about replication", log=TRUE, at=6:1, ylab="Journal impact factor",labels=c("No","Yes"))
+points(info_mean[,3]~c(6,4:1), pch=19, col=1)
+arrows(c(6,4:1),info_mean[,3]+info_se[,3],c(6,4:1),info_mean[,3]-info_se[,3], code=3, angle=90, length=0.1, col=1)
 mtext("A)",side=3, adj=0.02, las=1,outer=TRUE, line=-2, cex=1.5)
+legend("topright",c("1","2-5",">5"),col=c(2,"purple",4),pch=19, title="Number of Journals", bty="n")
 
-beeswarm(JIF~novelty+mult_pub,dd_scope, subset=novelty!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(1,0.3),method = "compactswarm",corral="wrap", xlab="Used novelty language", log=TRUE, at=6:1, ylab="Journal impact factor")
-points(novelty_mean[,3]~c(6:1), pch=19, col="red")
-arrows(c(6:1),novelty_mean[,3]+novelty_se[,3],c(6:1),novelty_mean[,3]-novelty_se[,3], code=3, angle=90, length=0.1, col="red")
+beeswarm(JIF~novelty+mult_pub,dd_scope, subset=novelty!="Out of scope for this journal",pch=19, cex=0.75, col=scales::alpha(c(2,2,"purple","purple",4,4),0.3),method = "compactswarm",corral="wrap", xlab="Used novelty language", log=TRUE, at=6:1, ylab="Journal impact factor",labels=c("No","Yes"))
+points(novelty_mean[,3]~c(6:1), pch=19, col=1)
+arrows(c(6:1),novelty_mean[,3]+novelty_se[,3],c(6:1),novelty_mean[,3]-novelty_se[,3], code=3, angle=90, length=0.1, col=1)
 mtext("B)",side=3, adj=0.53, las=1,outer=TRUE, line=-2, cex=1.5)
 
 
