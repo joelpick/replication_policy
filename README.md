@@ -56,10 +56,13 @@ Data from
 
 
 ## R/
+Files assumes that the root directory when running the code is the 'replication_policy' directory.
 
 ### policy_figs.R
 Generates summary statistics reported in the manuscript, figures 1-3 and the results from the journal impact factor model. 
-File assumes that the root directory when running the code is the 'replication_policy' directory.
+
+### SM_analysis.R
+Supplementary analysis. Runs impact factors model including publisher level random effects. Creates Figures S1-S3.
 
 
 ### Software Used
@@ -74,6 +77,8 @@ beeswarm_0.4.0
 
 scales_1.4.0
 
+lme4_1.1-37
+
 
 ## Figures
 Figure_replication_policy.png
@@ -82,4 +87,8 @@ Figure_novel_policy.png
 
 Figure_JIF.png
 
+FigureS1_publisher_JIF.png
 
+FigureS2_replication_policy_publisher.png
+
+FigureS3_JIF_publisher_novelty.png
