@@ -14,7 +14,7 @@ Data and code for 'What do ecology and evolutionary biology journal websites com
 ## Data/
 
 ### replication.csv
-Data from 
+Data on journal replication policy from 233 journals in Ecology and Evolutionary Biology
 
 **Timestamp:** time and date of extraction
 
@@ -54,6 +54,13 @@ Data from
 
 **JIF:** 2023 journal impact factor 
 
+### publishers.csv
+Data on publishers for 233 journals, used in the supplementary analysis
+
+**Journal:** journal title
+**JIF:**	2023 journal impact factor 
+**Publisher:**	Publisher title from web of science
+**Publisher2:** Reviewed publisher title, pooling the same publisher with different names in the web of science listing 
 
 ## R/
 Files assumes that the root directory when running the code is the 'replication_policy' directory.
